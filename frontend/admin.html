@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wedding in Naija — Admin</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  :root {
+    --maroon: #3a0f14; --maroon-2: #4d141b; --gold: #d8a13c; --gold-2: #f0c878; --cream: #fdf4ef;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: 'Segoe UI', system-ui, sans-serif; background: var(--cream); color: var(--maroon); }
+  header { background: var(--maroon); color: var(--gold-2); padding: 20px 32px; display:flex; justify-content:space-between; align-items:center; }
+  header h1 { margin:0; font-size: 1.3rem; }
+  nav { display:flex; gap:8px; padding: 16px 32px; background:#fff; border-bottom: 1px solid #eee; flex-wrap:wrap; }
+  nav button { background:none; border:1px solid var(--maroon-2); color: var(--maroon-2); padding: 8px 16px; border-radius: 6px; cursor:pointer; font-size:.9rem; }
+  nav button.active { background: var(--maroon-2); color: #fff; }
+  main { padding: 24px 32px; max-width: 1100px; margin: 0 auto; }
+  .cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:16px; margin-bottom: 24px; }
+  .card { background:#fff; border-radius:10px; padding:16px 18px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .card .num { font-size: 1.6rem; font-weight:700; color: var(--maroon-2); }
+  .card .label { font-size:.8rem; color:#777; }
+  table { width:100%; border-collapse: collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  th, td { text-align:left; padding: 10px 14px; border-bottom: 1px solid #f0e6e0; font-size:.88rem; }
+  th { background: var(--gold-2); color: var(--maroon); }
+  .panel { display:none; }
+  .panel.active { display:block; }
+  .row-actions button { font-size:.75rem; padding:4px 8px; margin-right:4px; border-radius:4px; border:1px solid #ccc; background:#fff; cursor:pointer; }
+  .login-box { max-width: 360px; margin: 80px auto; background:#fff; padding: 28px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.1); }
+  .login-box input { width:100%; padding:10px; margin: 6px 0 14px; border:1px solid #ddd; border-radius:6px; }
+  .login-box button { width:100%; padding:10px; background: var(--maroon-2); color:#fff; border:none; border-radius:6px; cursor:pointer; }
+  .error { color: #b3261e; font-size: .85rem; margin-top: 6px; }
+  .payout-form { display:flex; gap:8px; margin-bottom: 16px; }
+  .payout-form input { padding:8px; border:1px solid #ddd; border-radius:6px; }
+  .payout-form button { padding:8px 14px; background: var(--gold); border:none; border-radius:6px; cursor:pointer; font-weight:600; }
+</style>
+</head>
+<body>
+
+<div id="loginView" class="login-box">
+  <h2>Admin sign in</h2>
+  <input id="loginEmail" type="email" placeholder="Admin email" />
+  <input id="loginPassword" type="password" placeholder="Password" />
+  <button onclick="doLogin()">Sign in</button>
+  <div id="loginError" class="error"></div>
+  <p style="font-size:.75rem;color:#888;margin-top:14px;">
+    This page only works for an account with the <code>admin</code> role.
+    See the README for how to promote a user to admin in the database.
+  </p>
+</div>
+
+<div id="adminView" style="display:none;">
+  <header>
+    <h1>Wedding in Naija — Admin</h1>
+    <button onclick="logout()" style="background:none;border:1px solid var(--gold-2);color:var(--gold-2);padding:6px 12px;border-radius:6px;cursor:pointer;">Log out</button>
+  </header>
+  <nav>
+    <button class="active" onclick="showPanel('overview', this)">Overview</button>
+    <button onclick="showPanel('users', this)">Users</button>
+    <button onclick="showPanel('transactions', this)">Transactions</button>
+    <button onclick="showPanel('flagged', this)">Flagged Requests</button>
+    <button onclick="showPanel('payouts', this)">Payouts</button>
+  </nav>
+  <main>
+    <div id="panel-overview" class="panel active">
+      <div class="cards" id="overviewCards"></div>
+    </div>
+
+    <div id="panel-users" class="panel">
+      <table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th></tr></thead>
+      <tbody id="usersBody"></tbody></table>
+    </div>
+
+    <div id="panel-transactions" class="panel">
+      <table><thead><tr><th>Person</th><th>Type</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+      <tbody id="txBody"></tbody></table>
+    </div>
+
+    <div id="panel-flagged" class="panel">
+      <table><thead><tr><th>Contact</th><th>Services</th><th>Location</th><th>Status</th></tr></thead>
+      <tbody id="flaggedBody"></tbody></table>
+    </div>
+
+    <div id="panel-payouts" class="panel">
+      <div class="payout-form">
+        <input id="payoutAmount" type="number" placeholder="Amount (₦)" />
+        <input id="payoutRef" type="text" placeholder="Bank reference / note" />
+        <button onclick="createPayout()">Record payout to my bank</button>
+      </div>
+      <p style="font-size:.8rem;color:#888;">
+        This is a ledger only — it doesn't move money. Do the actual transfer in your
+        bank or Paystack settlement dashboard, then log it here and mark it complete.
+      </p>
+      <table><thead><tr><th>Amount</th><th>Reference</th><th>Status</th><th>Date</th><th></th></tr></thead>
+      <tbody id="payoutsBody"></tbody></table>
+    </div>
+  </main>
+</div>
+
+<script>
+  const API_BASE_URL = 'http://localhost:4000/api'; // update to your live backend URL after deploy
+  let token = localStorage.getItem('win_admin_token') || '';
+
+  function esc(v){ return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  function authHeaders() { return { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }; }
+
+  async function doLogin() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    const errEl = document.getElementById('loginError');
+    errEl.textContent = '';
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) { errEl.textContent = data.error || 'Login failed.'; return; }
+      if (data.user.role !== 'admin') { errEl.textContent = 'This account is not an admin.'; return; }
+      token = data.token;
+      localStorage.setItem('win_admin_token', token);
+      enterDashboard();
+    } catch (e) { errEl.textContent = 'Could not reach the server. Is the backend running?'; }
+  }
+
+  function logout() { localStorage.removeItem('win_admin_token'); token = ''; location.reload(); }
+
+  function showPanel(name, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    btn.classList.add('active');
+    if (name === 'users') loadUsers();
+    if (name === 'transactions') loadTransactions();
+    if (name === 'flagged') loadFlagged();
+    if (name === 'payouts') loadPayouts();
+  }
+
+  async function enterDashboard() {
+    document.getElementById('loginView').style.display = 'none';
+    document.getElementById('adminView').style.display = 'block';
+    loadOverview();
+  }
+
+  async function loadOverview() {
+    const res = await fetch(`${API_BASE_URL}/admin/overview`, { headers: authHeaders() });
+    const data = await res.json();
+    const cards = document.getElementById('overviewCards');
+    const userCount = data.usersByRole.reduce((s, r) => s + Number(r.count), 0);
+    cards.innerHTML = `
+      <div class="card"><div class="num">${userCount}</div><div class="label">Total users</div></div>
+      <div class="card"><div class="num">${data.vendorCount}</div><div class="label">Vendors</div></div>
+      <div class="card"><div class="num">₦${data.totalWalletBalance.toLocaleString()}</div><div class="label">Total wallet balance</div></div>
+      <div class="card"><div class="num">₦${data.pendingPayoutTotal.toLocaleString()}</div><div class="label">Pending payouts</div></div>
+    `;
+  }
+
+  async function loadUsers() {
+    const res = await fetch(`${API_BASE_URL}/admin/users`, { headers: authHeaders() });
+    const data = await res.json();
+    document.getElementById('usersBody').innerHTML = data.users.map(u => `
+      <tr><td>${esc(u.full_name)}</td><td>${esc(u.email)}</td><td>${esc(u.phone || '—')}</td><td>${esc(u.role)}</td>
+      <td>${new Date(u.created_at).toLocaleDateString()}</td></tr>`).join('');
+  }
+
+  async function loadTransactions() {
+    const res = await fetch(`${API_BASE_URL}/admin/transactions`, { headers: authHeaders() });
+    const data = await res.json();
+    document.getElementById('txBody').innerHTML = data.transactions.map(t => `
+      <tr><td>${esc(t.full_name)}</td><td>${esc(t.type)}</td><td>₦${Number(t.amount).toLocaleString()}</td>
+      <td>${esc(t.status)}</td><td>${new Date(t.created_at).toLocaleDateString()}</td></tr>`).join('');
+  }
+
+  async function loadFlagged() {
+    const res = await fetch(`${API_BASE_URL}/admin/flagged-requests`, { headers: authHeaders() });
+    const rows = await res.json();
+    document.getElementById('flaggedBody').innerHTML = rows.map(r => `
+      <tr><td>${esc(r.contact_name)}</td><td>${esc((r.services_needed||[]).join(', '))}</td>
+      <td>${esc(r.location_text)}</td><td>${esc(r.status)}</td></tr>`).join('');
+  }
+
+  async function loadPayouts() {
+    const res = await fetch(`${API_BASE_URL}/admin/payouts`, { headers: authHeaders() });
+    const rows = await res.json();
+    document.getElementById('payoutsBody').innerHTML = rows.map(p => `
+      <tr><td>₦${Number(p.amount).toLocaleString()}</td><td>${esc(p.bank_ref || '—')}</td>
+      <td>${esc(p.status)}</td><td>${new Date(p.created_at).toLocaleDateString()}</td>
+      <td class="row-actions">${p.status === 'pending' ? `<button onclick="completePayout('${p.id}')">Mark complete</button>` : ''}</td></tr>`).join('');
+  }
+
+  async function createPayout() {
+    const amount = document.getElementById('payoutAmount').value;
+    const bank_ref = document.getElementById('payoutRef').value;
+    if (!amount) return;
+    await fetch(`${API_BASE_URL}/admin/payouts`, { method:'POST', headers: authHeaders(), body: JSON.stringify({ amount, bank_ref }) });
+    document.getElementById('payoutAmount').value = '';
+    document.getElementById('payoutRef').value = '';
+    loadPayouts();
+  }
+
+  async function completePayout(id) {
+    await fetch(`${API_BASE_URL}/admin/payouts/${id}/complete`, { method:'PUT', headers: authHeaders() });
+    loadPayouts();
+  }
+
+  if (token) enterDashboard();
+</script>
+</body>
+</html>

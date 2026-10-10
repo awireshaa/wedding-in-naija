@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wedding in Naija — Find Trusted Wedding Vendors</title>
+<style>
+  :root{
+    --maroon-900:#3a0f14;
+    --maroon-800:#4d141b;
+    --maroon-700:#6b1c26;
+    --gold:#d8a13c;
+    --gold-light:#f0c878;
+    --cream:#fdf4ef;
+    --ink:#2a1f3d;
+    --red-cta:#c0293b;
+    --red-cta-dark:#a11f2f;
+    --pink-pill:#fbe6e2;
+    --line:#eee0da;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Georgia', 'Times New Roman', serif;
+    background:var(--cream); color:var(--ink);
+  }
+  h1,h2,h3,.brand{ font-family:'Georgia', 'Times New Roman', serif; }
+  .sans{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px; background:#fff; border-bottom:1px solid var(--line);
+    position:sticky; top:0; z-index:20;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:bold; font-size:20px; color:var(--maroon-900); }
+  .brand .mark{
+    width:38px;height:38px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, var(--gold-light), var(--gold) 70%);
+    display:flex;align-items:center;justify-content:center;color:var(--maroon-900);font-size:18px;
+  }
+  nav{ display:flex; gap:20px; font-family:sans-serif; color:#6b6470; font-size:15px; }
+  nav a{ color:#6b6470; text-decoration:none; cursor:pointer; }
+  nav a:hover{ color:var(--maroon-900); }
+  .btn{
+    font-family:sans-serif; border-radius:999px; padding:10px 20px; font-size:14px;
+    cursor:pointer; border:1px solid transparent; font-weight:600;
+  }
+  .btn-outline{ background:#fff; border-color:var(--red-cta); color:var(--red-cta); }
+  .btn-cta{ background:var(--red-cta); color:#fff; }
+  .btn-cta:hover{ background:var(--red-cta-dark); }
+  .header-actions{ display:flex; gap:10px; align-items:center; }
+  .hero{
+    background:radial-gradient(ellipse at top, var(--maroon-700), var(--maroon-900) 70%);
+    color:#f3e7da; text-align:center; padding:70px 20px 50px;
+  }
+  .hero .eyebrow{ letter-spacing:3px; font-size:13px; color:var(--gold-light); font-family:sans-serif; margin-bottom:14px; }
+  .hero h1{ font-size:42px; margin:0 0 16px; }
+  .hero p{ font-family:sans-serif; color:#e7d7c4; max-width:560px; margin:0 auto 30px; line-height:1.6; }
+  .stats{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; max-width:720px; margin:0 auto; }
+  .stat{ background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:14px; padding:18px 26px; min-width:160px; }
+  .stat b{ display:block; font-size:26px; color:#fff; }
+  .stat span{ font-family:sans-serif; font-size:13px; color:#d9c4ae; }
+
+  .search-card{
+    background:#fff; max-width:900px; margin:-40px auto 40px; border-radius:20px;
+    box-shadow:0 20px 40px rgba(58,15,20,.12); padding:28px; position:relative; z-index:5;
+  }
+  .search-card .eyebrow{ font-family:sans-serif; letter-spacing:2px; font-size:12px; color:#a08; color:var(--red-cta); }
+  .search-grid{ display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:12px; margin-top:14px; }
+  .search-grid input, .search-grid select{
+    font-family:sans-serif; padding:12px 16px; border-radius:999px; border:1px solid var(--line);
+    background:var(--cream); font-size:14px; width:100%;
+  }
+  .search-grid button{ border-radius:999px; }
+  @media (max-width:800px){ .search-grid{ grid-template-columns:1fr; } }
+
+  section{ max-width:1080px; margin:0 auto; padding:10px 20px 60px; }
+  .section-title{ text-align:center; margin-bottom:28px; }
+  .section-title .eyebrow{ font-family:sans-serif; letter-spacing:2px; font-size:12px; color:var(--red-cta); }
+  .section-title h2{ font-size:30px; margin:6px 0 0; color:var(--maroon-900); }
+
+  .vendor-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:18px; }
+  .card{
+    background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .card-top{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .featured{ font-family:sans-serif; font-size:11px; letter-spacing:1px; color:var(--red-cta); font-weight:700; }
+  .tier{
+    font-family:sans-serif; font-size:12px; font-weight:700; padding:5px 12px; border-radius:999px;
+    display:flex; align-items:center; gap:5px;
+  }
+  .tier-gold{ background:linear-gradient(135deg,var(--gold-light),var(--gold)); color:#5a3c00; }
+  .tier-silver{ background:#e4e4e8; color:#54545c; }
+  .tier-bronze{ background:#eddccb; color:#7a4d24; }
+  .card h3{ margin:0; font-size:19px; color:var(--maroon-900); line-height:1.3; }
+  .card .desc{ font-family:sans-serif; font-size:14px; color:#6b6470; line-height:1.5; }
+  .card .loc{ font-family:sans-serif; font-size:13px; color:#6b6470; display:flex; gap:6px; }
+  .pill-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .pill{ font-family:sans-serif; font-size:12px; background:var(--pink-pill); color:var(--red-cta); padding:5px 12px; border-radius:999px; }
+  .tag{ font-family:sans-serif; font-size:12px; border:1px solid var(--line); color:#6b6470; padding:5px 12px; border-radius:999px; }
+  .card-actions{ display:flex; gap:10px; margin-top:6px; }
+  .card-actions .btn{ flex:1; text-align:center; font-size:13px; padding:10px; }
+
+  .split{ display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:flex-start; }
+  @media (max-width:800px){ .split{ grid-template-columns:1fr; } }
+  .panel{ background:#fff; border:1px solid var(--line); border-radius:18px; padding:24px; }
+  .panel h3{ color:var(--maroon-900); margin-top:0; }
+  form label{ font-family:sans-serif; font-size:13px; color:#6b6470; display:block; margin:12px 0 6px; }
+  form input, form select, form textarea{
+    width:100%; font-family:sans-serif; padding:11px 14px; border-radius:10px;
+    border:1px solid var(--line); background:var(--cream); font-size:14px;
+  }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .checkbox-row{ display:flex; align-items:center; gap:8px; font-family:sans-serif; font-size:13px; color:#6b6470; margin-top:10px; }
+
+  .request-item{ border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:12px; font-family:sans-serif; }
+  .request-item .meta{ font-size:13px; color:#6b6470; margin:4px 0; }
+  .locked-contact{ filter:blur(4px); user-select:none; }
+  .unlock-row{ display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+  .price-tag{ font-size:13px; color:var(--red-cta); font-weight:600; }
+
+  .wallet-box{ display:flex; align-items:center; justify-content:space-between; background:var(--pink-pill); border-radius:14px; padding:16px 20px; font-family:sans-serif; margin-bottom:16px; }
+  .wallet-box b{ font-size:22px; color:var(--maroon-900); }
+
+  footer{ background:var(--maroon-900); color:#e7d7c4; text-align:center; padding:36px 20px; font-family:sans-serif; font-size:13px; }
+  footer .brand-foot{ color:#fff; font-size:18px; margin-bottom:8px; font-family:Georgia, serif; }
+
+  .modal-backdrop{ position:fixed; inset:0; background:rgba(42,31,61,.5); display:none; align-items:center; justify-content:center; z-index:100; }
+  .modal-backdrop.open{ display:flex; }
+  .modal{ background:#fff; border-radius:18px; padding:28px; width:100%; max-width:400px; }
+  .modal h3{ margin-top:0; color:var(--maroon-900); }
+  .modal .switch{ font-family:sans-serif; font-size:13px; color:var(--red-cta); cursor:pointer; margin-top:10px; text-align:center; }
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--maroon-900); color:#fff;
+    padding:12px 22px; border-radius:999px; font-family:sans-serif; font-size:14px; z-index:200; display:none;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><span class="mark">💍</span> Wedding in Naija</div>
+  <nav class="sans">
+    <a onclick="scrollTo('directory')">Vendors</a>
+    <a onclick="scrollTo('requestboard')">Requests</a>
+    <a onclick="scrollTo('post')">Post a Request</a>
+  </nav>
+  <div class="header-actions">
+    <button class="btn btn-outline sans" onclick="openAuth('vendor')">Become a Vendor</button>
+    <button class="btn btn-cta sans" id="loginBtn" onclick="openAuth('couple')">Log In</button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="eyebrow sans">CURATED · VERIFIED · READY TO WOW</div>
+  <h1>Find Trusted Wedding Vendors,<br/>Anywhere in Nigeria</h1>
+  <p>Search by service, filter by location, and connect with standout photographers, planners, decorators and more — or post what you need and let vendors come to you.</p>
+  <div class="stats sans">
+    <div class="stat"><b id="statVendors">—</b><span>Active vendors</span></div>
+    <div class="stat"><b>Nationwide</b><span>Every major city</span></div>
+    <div class="stat"><b>Fast replies</b><span>Verified contacts only</span></div>
+  </div>
+</div>
+
+<div class="search-card">
+  <div class="eyebrow sans">FIND YOUR DREAM TEAM</div>
+  <h3 style="margin:6px 0 0;color:var(--maroon-900);">Search, filter, and connect instantly</h3>
+  <div class="search-grid">
+    <input id="fName" placeholder="Vendor name" />
+    <select id="fService">
+      <option value="">All services</option>
+      <option>Photographer</option>
+      <option>Videographer</option>
+      <option>Planner</option>
+      <option>Decor</option>
+      <option>MC</option>
+      <option>Caterer</option>
+      <option>Makeup</option>
+      <option>Band</option>
+    </select>
+    <input id="fCity" placeholder="City (e.g. Ajah, Ibadan)" />
+    <button class="btn btn-cta sans" onclick="loadVendors(1)">Search</button>
+  </div>
+</div>
+
+<section id="directory">
+  <div class="section-title">
+    <div class="eyebrow sans">DISCOVER STANDOUT WEDDING PROS</div>
+    <h2>Featured Vendors</h2>
+  </div>
+  <div class="vendor-grid" id="vendorGrid">
+    <p class="sans" style="color:#a89; grid-column:1/-1; text-align:center;">Connect this page to a live backend (see API_BASE_URL) to load real vendors.</p>
+  </div>
+</section>
+
+<section id="requestpost-split">
+  <div class="split">
+    <div class="panel" id="post">
+      <h3>Post a Wedding Request</h3>
+      <p class="sans desc">Tell us what you need — verified vendors will reach out with quotes.</p>
+      <form id="requestForm" onsubmit="submitRequest(event)">
+        <div class="row2">
+          <div><label>Your name</label><input required id="rName" /></div>
+          <div><label>Phone number</label><input required id="rPhone" /></div>
+        </div>
+        <label>Services needed</label>
+        <input id="rServices" placeholder="Photographer, Decor, MC..." />
+        <div class="row2">
+          <div><label>Event type</label>
+            <select id="rEventType">
+              <option>Traditional</option><option>White Wedding</option><option>Engagement / Introduction</option>
+            </select>
+          </div>
+          <div><label>Event date</label><input type="date" id="rDate" /></div>
+        </div>
+        <div class="row2">
+          <div><label>Location</label><input required id="rLocation" placeholder="e.g. Awoyaya-Bogije, Lagos" /></div>
+          <div><label>Guest count</label><input type="number" id="rGuests" /></div>
+        </div>
+        <label>Total budget (₦)</label>
+        <input type="number" id="rBudget" placeholder="2000000" />
+        <div class="checkbox-row"><input type="checkbox" id="rVenueHelp"/> I need venue suggestions</div>
+        <button type="submit" class="btn btn-cta sans" style="margin-top:18px;width:100%;">Submit Request</button>
+      </form>
+    </div>
+
+    <div class="panel" id="requestboard">
+      <h3>Vendor Request Board</h3>
+      <p class="sans desc">Log in as a vendor to see live requests and contact couples directly. Free while we launch.</p>
+      <div id="requestList">
+        <p class="sans" style="color:#a89;">Log in as a vendor to view requests.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="brand-foot">Wedding in Naija</div>
+  Curated, verified wedding vendors — nationwide.<br/>
+  © <span id="year"></span> Wedding in Naija. All rights reserved.
+</footer>
+
+<div class="modal-backdrop" id="authModal">
+  <div class="modal">
+    <h3 id="authTitle">Log In</h3>
+    <form id="authForm" onsubmit="submitAuth(event)">
+      <div id="nameField" style="display:none;"><label class="sans" style="font-size:13px;color:#6b6470;">Full name</label><input id="authName" style="width:100%;padding:11px;border-radius:10px;border:1px solid #eee;margin-bottom:10px;"/></div>
+      <div id="phoneField" style="display:none;"><label class="sans" style="font-size:13px;color:#6b6470;">Phone number</label><input id="authPhone" type="tel" placeholder="080X XXX XXXX" style="width:100%;padding:11px;border-radius:10px;border:1px solid #eee;margin-bottom:10px;"/></div>
+      <label class="sans" style="font-size:13px;color:#6b6470;">Email</label>
+      <input id="authEmail" type="email" required style="width:100%;padding:11px;border-radius:10px;border:1px solid #eee;margin-bottom:10px;"/>
+      <label class="sans" style="font-size:13px;color:#6b6470;">Password</label>
+      <input id="authPassword" type="password" required style="width:100%;padding:11px;border-radius:10px;border:1px solid #eee;margin-bottom:10px;"/>
+      <button class="btn btn-cta sans" style="width:100%;" type="submit">Continue</button>
+    </form>
+    <div class="switch" onclick="toggleAuthMode()">Don't have an account? Sign up</div>
+    <div class="switch" onclick="closeAuth()">Cancel</div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="profileModal">
+  <div class="modal">
+    <h3>Create your vendor profile</h3>
+    <p class="sans" style="font-size:13px;color:#6b6470;margin-top:0;">This is what couples see in the directory. You can update it later.</p>
+    <form id="profileForm" onsubmit="submitProfile(event)">
+      <input id="pName" required placeholder="Business name" style="width:100%;padding:11px;border-radius:10px;border:1px solid #eee;margin-bottom:10px;"/>
+      <input id="pTagline" placeholder="One-line tagline" style="width:100%;padding:11px;border-radius:10px;border:1px solid #eee;margin-bottom:10px;"/>
+      <input id="pServices" placeholder="Services (comma separated, e.g. Photography, Decor)" style="width:100%;padding:11px;border-radius:10px;border:1px solid #eee;margin-bottom:10px;"/>
+      <input id="pState" required placeholder="State (e.g. Lagos)" style="width:100%;padding:11px;border-radius:10px;border:1px solid #eee;margin-bottom:10px;"/>
+      <input id="pCity" required placeholder="City / area (e.g. Ikeja)" style="width:100%;padding:11px;border-radius:10px;border:1px solid #eee;margin-bottom:10px;"/>
+      <input id="pWhatsapp" placeholder="WhatsApp number" style="width:100%;padding:11px;border-radius:10px;border:1px solid #eee;margin-bottom:10px;"/>
+      <textarea id="pDesc" rows="3" placeholder="Tell couples about your work and experience" style="width:100%;padding:11px;border-radius:10px;border:1px solid #eee;margin-bottom:10px;"></textarea>
+      <button class="btn btn-cta sans" style="width:100%;" type="submit">Save profile</button>
+    </form>
+    <div class="switch" onclick="document.getElementById('profileModal').classList.remove('open')">Do this later</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Point this at your deployed backend once it's live ──────────
+const API_BASE_URL = 'http://localhost:4000/api';
+
+let session = JSON.parse(localStorage.getItem('win_session') || 'null');
+let authMode = { isSignup: false, role: 'couple' };
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(()=> t.style.display='none', 3000);
+}
+
+// Escape anything typed by users before putting it in the page (prevents script injection)
+function esc(v){
+  return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function scrollTo(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+
+async function api(path, opts = {}) {
+  const headers = { 'Content-Type': 'application/json', ...(opts.headers||{}) };
+  if (session?.token) headers.Authorization = `Bearer ${session.token}`;
+  const res = await fetch(`${API_BASE_URL}${path}`, { ...opts, headers });
+  const data = await res.json().catch(()=> ({}));
+  if (!res.ok) throw new Error(data.error || 'Something went wrong');
+  return data;
+}
+
+// ── Vendor directory ──────────────────────────────────────────
+function tierBadge(tier){
+  const cls = tier === 'gold' ? 'tier-gold' : tier === 'silver' ? 'tier-silver' : 'tier-bronze';
+  return `<span class="tier ${cls} sans">🏆 ${tier[0].toUpperCase()+tier.slice(1)}</span>`;
+}
+
+function vendorCard(v){
+  const tags = (v.tags||[]).slice(0,3).map(t=>`<span class="tag">#${esc(t)}</span>`).join('');
+  const cats = (v.categories||[]).map(c=>`<span class="pill">${esc(c)}</span>`).join('');
+  return `
+    <div class="card">
+      <div class="card-top">
+        <span class="featured sans">FEATURED VENDOR</span>
+        ${tierBadge(v.tier || 'bronze')}
+      </div>
+      <h3>${esc(v.business_name)}</h3>
+      <div class="desc">${esc(v.tagline)}</div>
+      <div class="loc sans">📍 ${esc(v.city)}, ${esc(v.state)}</div>
+      <div class="pill-row">${cats}${tags}</div>
+      <div class="card-actions">
+        <button class="btn btn-outline sans" onclick="viewProfile('${esc(v.id)}')">View Profile</button>
+        <button class="btn btn-cta sans" onclick="viewProfile('${esc(v.id)}')">Show Contact</button>
+      </div>
+    </div>`;
+}
+
+async function loadVendors(page=1){
+  const name = document.getElementById('fName').value;
+  const service = document.getElementById('fService').value;
+  const city = document.getElementById('fCity').value;
+  const params = new URLSearchParams({ page });
+  if (name) params.set('name', name);
+  if (service) params.set('service', service);
+  if (city) params.set('city', city);
+
+  const grid = document.getElementById('vendorGrid');
+  try {
+    const data = await api(`/vendors?${params}`);
+    document.getElementById('statVendors').textContent = data.vendors.length + '+';
+    grid.innerHTML = data.vendors.length
+      ? data.vendors.map(vendorCard).join('')
+      : `<p class="sans" style="grid-column:1/-1;text-align:center;color:#a89;">No vendors match yet — be the first to list.</p>`;
+  } catch (e) {
+    grid.innerHTML = `<p class="sans" style="grid-column:1/-1;text-align:center;color:#a89;">Couldn't reach the backend (${e.message}). Once it's deployed and API_BASE_URL is set, vendors load here automatically.</p>`;
+  }
+}
+
+function viewProfile(id){ toast('Vendor profile view — wire this to a dedicated profile page.'); }
+
+// ── Post a request ────────────────────────────────────────────
+async function submitRequest(e){
+  e.preventDefault();
+  const payload = {
+    contact_name: document.getElementById('rName').value,
+    contact_phone: document.getElementById('rPhone').value,
+    services_needed: document.getElementById('rServices').value.split(',').map(s=>s.trim()).filter(Boolean),
+    event_type: document.getElementById('rEventType').value,
+    event_date: document.getElementById('rDate').value || null,
+    location_text: document.getElementById('rLocation').value,
+    guest_count: Number(document.getElementById('rGuests').value) || null,
+    total_budget: Number(document.getElementById('rBudget').value) || null,
+    need_venue_suggestions: document.getElementById('rVenueHelp').checked,
+  };
+  try {
+    await api('/requests', { method:'POST', body: JSON.stringify(payload) });
+    toast('Request posted! Vendors will start reaching out.');
+    e.target.reset();
+  } catch(err){ toast(err.message); }
+}
+
+// ── Vendor request board (free: contact details shown straight away) ──
+function requestItem(r){
+  const c = r.contact || {};
+  const phone = esc(c.contact_phone);
+  const wa = String(c.contact_whatsapp || c.contact_phone || '').replace(/\D/g,'');
+  const contact = `${esc(c.contact_name)} · <a href="tel:${phone}">${phone}</a>` +
+    (wa ? ` · <a href="https://wa.me/${wa.startsWith('0') ? '234' + wa.slice(1) : wa}" target="_blank" rel="noopener">WhatsApp</a>` : '');
+  return `
+    <div class="request-item">
+      <b>${esc(r.event_type)} in ${esc(r.location_text)}</b>
+      <div class="meta">Services: ${esc((r.services_needed||[]).join(', '))}</div>
+      <div class="meta">Guests: ${esc(r.guest_count||'—')} · Budget: ₦${r.total_budget ? Number(r.total_budget).toLocaleString():'—'}</div>
+      <div class="meta">Contact: ${contact}</div>
+      <div class="unlock-row">
+        <span class="price-tag">Free</span>
+        <button class="btn btn-outline sans" onclick="reportRequest('${esc(r.id)}')">Report</button>
+      </div>
+    </div>`;
+}
+
+async function reportRequest(id){
+  const reason = prompt('What is wrong with this request? (e.g. fake, spam, scam)');
+  if (reason === null) return;
+  try {
+    await api(`/requests/${id}/report`, { method:'POST', body: JSON.stringify({ reason }) });
+    toast('Thanks — reported. We will review it.');
+    loadRequestBoard();
+  } catch(e){ toast(e.message); }
+}
+
+async function loadRequestBoard(){
+  const list = document.getElementById('requestList');
+  if (!session || session.user.role !== 'vendor') {
+    list.innerHTML = `<p class="sans" style="color:#a89;">Log in as a vendor to view requests.</p>`;
+    return;
+  }
+  try {
+    const rows = await api('/requests');
+    list.innerHTML = rows.length ? rows.map(requestItem).join('') : `<p class="sans" style="color:#a89;">No open requests right now.</p>`;
+  } catch(e){ list.innerHTML = `<p class="sans" style="color:#a89;">${e.message}</p>`; }
+}
+
+// ── Auth modal ────────────────────────────────────────────────
+function openAuth(role){
+  authMode.role = role;
+  document.getElementById('authModal').classList.add('open');
+  document.getElementById('authTitle').textContent = role === 'vendor' ? 'Join as a Vendor' : 'Log In';
+  if (role === 'vendor') { authMode.isSignup = true; document.getElementById('nameField').style.display='block'; document.getElementById('phoneField').style.display='block'; }
+}
+function closeAuth(){ document.getElementById('authModal').classList.remove('open'); }
+function toggleAuthMode(){
+  authMode.isSignup = !authMode.isSignup;
+  document.getElementById('nameField').style.display = authMode.isSignup ? 'block' : 'none';
+  document.getElementById('phoneField').style.display = authMode.isSignup ? 'block' : 'none';
+  document.getElementById('authTitle').textContent = authMode.isSignup ? 'Create Account' : 'Log In';
+}
+
+async function submitAuth(e){
+  e.preventDefault();
+  const email = document.getElementById('authEmail').value;
+  const password = document.getElementById('authPassword').value;
+  try {
+    let data;
+    if (authMode.isSignup) {
+      const full_name = document.getElementById('authName').value;
+      const phone = document.getElementById('authPhone').value;
+      data = await api('/auth/register', { method:'POST', body: JSON.stringify({ email, password, full_name, phone, role: authMode.role }) });
+    } else {
+      data = await api('/auth/login', { method:'POST', body: JSON.stringify({ email, password }) });
+    }
+    session = data; localStorage.setItem('win_session', JSON.stringify(data));
+    closeAuth(); toast(`Welcome, ${data.user.full_name}`);
+    document.getElementById('loginBtn').textContent = data.user.full_name;
+    loadRequestBoard(); checkVendorProfile();
+  } catch(err){ toast(err.message); }
+}
+
+// ── Vendor profile ────────────────────────────────────────────
+async function checkVendorProfile(){
+  if (!session || session.user.role !== 'vendor') return;
+  try {
+    const d = await api('/vendors/me/dashboard');
+    if (!d.profile) document.getElementById('profileModal').classList.add('open');
+  } catch {}
+}
+
+async function submitProfile(e){
+  e.preventDefault();
+  const list = id => document.getElementById(id).value.split(',').map(s=>s.trim()).filter(Boolean);
+  const payload = {
+    business_name: document.getElementById('pName').value,
+    tagline: document.getElementById('pTagline').value,
+    categories: list('pServices'),
+    state: document.getElementById('pState').value,
+    city: document.getElementById('pCity').value,
+    whatsapp: document.getElementById('pWhatsapp').value,
+    description: document.getElementById('pDesc').value,
+  };
+  try {
+    await api('/vendors', { method:'POST', body: JSON.stringify(payload) });
+    document.getElementById('profileModal').classList.remove('open');
+    toast('Profile saved — you are now listed!');
+    loadVendors();
+  } catch(err){ toast(err.message); }
+}
+
+// ── Init ──────────────────────────────────────────────────────
+loadVendors();
+if (session) { document.getElementById('loginBtn').textContent = session.user.full_name; loadRequestBoard(); checkVendorProfile(); }
+</script>
+</body>
+</html>
